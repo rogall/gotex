@@ -1,0 +1,2 @@
+# gotex
+primeiro git golang
