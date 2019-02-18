@@ -73,7 +73,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/products", allProducts).Methods("GET")
 	myRouter.HandleFunc("/product/{name}", deleteProduct).Methods("DELETE")	
 	myRouter.HandleFunc("/product/{title}/{description}", newProduct).Methods("POST")
-	log.Fatal(http.ListenAndServe(":8081", myRouter))
+	log.Fatal(http.ListenAndServe("localhost:8081", myRouter))
 }
 
 func initialMigration() {
