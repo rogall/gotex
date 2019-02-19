@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+    "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -42,7 +43,7 @@ func newProduct(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	title := vars["title"]
-	description := vars["description"]
+	description := vars["description"]	
 
 	fmt.Println(title)
 	fmt.Println(description)
@@ -63,9 +64,11 @@ func deleteProduct(w http.ResponseWriter, r *http.Request) {
 
 	var product Product
 	db.Where("title = ?", title).Find(&product)
+	var t = product.Title
 	db.Delete(&product)
 
-	fmt.Fprintf(w, "Successfully Deleted Product")
+	fmt.Println(t)
+	
 }
 
 func handleRequests() {
@@ -73,7 +76,12 @@ func handleRequests() {
 	myRouter.HandleFunc("/products", allProducts).Methods("GET")
 	myRouter.HandleFunc("/product/{name}", deleteProduct).Methods("DELETE")	
 	myRouter.HandleFunc("/product/{title}/{description}", newProduct).Methods("POST")
-	log.Fatal(http.ListenAndServe("localhost:8081", myRouter))
+
+	headers := handlers.AllowedHeaders([]string {"X-Requested-With", "Content-type", "Authorization"})
+	methods := handlers.AllowedMethods([]string {"GET", "POST", "PUT", "DELETE"})
+	origins := handlers.AllowedOrigins([]string {"*"})
+
+	log.Fatal(http.ListenAndServe("localhost:8081", handlers.CORS(headers, methods, origins) (myRouter)))
 }
 
 func initialMigration() {
