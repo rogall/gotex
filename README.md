@@ -6,9 +6,9 @@ https://sourceforge.net/projects/tdm-gcc/
 
 e executar os comandos 
 
-go get github.com/gorilla/mux
+go get github.com/gorilla/handlers
 
-e
+go get github.com/gorilla/mux
 
 go get github.com/jinzhu/gorm
 
